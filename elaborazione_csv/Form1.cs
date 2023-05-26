@@ -13,18 +13,16 @@ namespace elaborazione_csv
 {
     public partial class Form1 : Form
     {
-        public struct lubs
-        {
-            public string anno, nazione, info, peso, note;
-        }
-        public lubs[] p;
-        public lubs p2;
         public int d;
+        public string[] a;
+        public StreamReader reader = new StreamReader(File.OpenRead(@"Cahino.csv"));
+        public StreamWriter writer = new StreamWriter(File.OpenRead(@"Cahino.csv"));
         public Form1()
         {
-            InitializeComponent();
-            lubs[] p = new lubs[d];
             d = 0;
+            a = new string[1000];
+            InitializeComponent();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -34,8 +32,6 @@ namespace elaborazione_csv
         private void op_Click(object sender, EventArgs e)
         {
             apri();
-            st(p2);
-            d++;
         }
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -47,26 +43,56 @@ namespace elaborazione_csv
             var reader = new StreamReader(File.OpenRead(@"Cahino.csv"));
             while (!reader.EndOfStream)
             {
+                //string rec = "Record";
+                //int[] miovalore = new int[r.Next(9,20)];
                 var line = reader.ReadLine();
                 var values = line.Split(';');
-                listView1.Items.Add(values[d]);
-                foreach (string coloumn1 in listView1.Items) //per ogni valore presente sulla listview
+                for (int i = 0; i < values.Length; i++)
                 {
-                    listView1.Columns.Add(coloumn1,20); //permette di creare delle colonne comprendenti le info sul file
+                    listView1.Columns.Add(values[i]);
+                    //listView1.Columns.Add(rec);
+                    //listView1.Columns[rec]= miovalore[i];
                 }
-                foreach (string coloumn2 in listView1.Items)
-                {
-                    listView1.Columns.Add(coloumn2, 20);
-                }
-                
-
-                
             }
         }
-        public string st(lubs p)
+        public void stampaval()
         {
-
-            return p2.anno;
+            var line = reader.ReadLine();
+            var values = line.Split(';');
+            Random r = new Random();
+            while (!reader.EndOfStream)
+            {
+                for (int i = 0; i < a.Length; i++)
+                {
+                    listView1.Columns.Add(values[d]);
+                }
+                if (d == 0)
+                {
+                    a[d] = d + ";miovalore";
+                    d++;
+                }
+                else
+                {
+                    string b = r.Next(10, 21).ToString();
+                    a[d] = a + ";" + b;
+                }
+                d++;
+                a[d] = reader.ReadLine();
+            }
+            writer.Write(a[d]);
+        }
+        public void maxval()
+        {
+            var line = reader.ReadLine();
+            var values = line.Split(';');
+            while (!reader.EndOfStream)
+            {
+                for (int i = 0; i < a.Length; i++)
+                {
+                    if (values[0].Length > values.Length)
+                        writer.WriteLine(a[d].Length);
+                }
+            }
         }
         #endregion
     }
